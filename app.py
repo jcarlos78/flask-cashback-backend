@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 import jwt
 import datetime
+import base64
 
 app = Flask(__name__)
 
@@ -95,22 +96,21 @@ def login():
 
     auth = request.authorization
 
-    auth_error = make_response('Authentication failure', 401, {'WWW-Authenticate: Basic realm="Authentication required", charset="UTF-8"'})
+    if not auth or not auth.username or not auth.password:
+        return make_response('Authentication failure', 401, {'WWW-Authenticate: Basic realm="Authentication required", charset="UTF-8"'})
 
-    if not auth or not auth.email or not auth.password:
-        return auth_error
-
-    user = User.query.filter_by(email=auth.email).first()
+    user = User.query.filter_by(email=auth.username).first()
 
     if not user:
-        return auth_error
+        return make_response('Authentication failure', 401, {'WWW-Authenticate: Basic realm="Authentication required", charset="UTF-8"'})
 
     if check_password_hash(user.password, auth.password):
-        token = jwt.encode({'public_id':user.public_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},app.config['SECRET_KEY'])
+        access_token = jwt.encode({'public_id':user.public_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
 
-        return jsonify({'token',token.decode('UTF-8')})
+        # return jsonify({'access_token', str(base64.b64encode(access_token).decode("utf-8"))})
+        return jsonify({'access_token': access_token.decode("utf-8")})
 
-    return auth_error
+    return make_response('Authentication failure', 401, {'WWW-Authenticate: Basic realm="Authentication required", charset="UTF-8"'})
 
 @app.route('/')
 def home():
