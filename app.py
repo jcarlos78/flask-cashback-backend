@@ -11,6 +11,7 @@ import uuid
 import jwt
 import datetime
 import urllib, json
+import ssl
 
 def create_app(env_config):
 
@@ -194,12 +195,14 @@ def create_app(env_config):
     @app.route('/product/accumulated', methods=['GET'])
     @token_required
     def get_accumulated_cash_back(current_user):
-        url = "https://mdaqk8ek5j.execute-api.us-east-1.amazonaws.com/v1/cashback?cpf={}".format(current_user.cpf)     
+        context = ssl._create_unverified_context()
+        #TODO make the create user validate and remove . and - from cpf
+        url = "https://mdaqk8ek5j.execute-api.us-east-1.amazonaws.com/v1/cashback?cpf={}".format(str(current_user.cpf).replace('.', '').replace('-',''))     
         request = urllib.request.Request(url)
         request.add_header("token", "&#39;ZXPURQOARHiMc6Y0flhRC1LVlZQVFRnm&#39;")
-        response = urllib.request.urlopen(request)
+        response = urllib.request.urlopen(request, context=context)
         data = json.loads(response.read())
-        return jsonify({'accumulated':data.credit})
+        return jsonify({'accumulated':data['body']['credit']})
 
     # Calculate the cash back percentage
     def get_cash_back_percentage(cpf,month):
