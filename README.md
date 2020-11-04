@@ -1,6 +1,7 @@
 # flask-cashback-backend
 
-
-pipenv install
-
+#Go to virtual env
 pipenv shell
+
+#Install dependencies
+pipenv install
