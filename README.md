@@ -3,17 +3,15 @@
 
 **#Iniciar virtual env**
 
- - [ ] pipenv shell
+ - pipenv shell
 
 **#Instalar dependencias**
 
- - [ ] pipenv install
+ - pipenv install
 
 **#TODO**
 
+ - [ ] criar teste de integração
+ - [ ] terminar testes unitários
+ - [ ] separar as camdas de routs model e services
 
- - criar teste de integração   
-   
- - terminar testes unitários
-
- - separar as camdas de routs model e services
