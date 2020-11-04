@@ -1,7 +1,19 @@
+
 # flask-cashback-backend
 
-#Go to virtual env
-pipenv shell
+**#Iniciar virtual env**
 
-#Install dependencies
-pipenv install
+ - [ ] pipenv shell
+
+**#Instalar dependencias**
+
+ - [ ] pipenv install
+
+**#TODO**
+
+
+ - criar teste de integração   
+   
+ - terminar testes unitários
+
+ - separar as camdas de routs model e services
